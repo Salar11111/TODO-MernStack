@@ -1,0 +1,24 @@
+{
+  "name": "task-master",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Full-stack TODO application with drag-and-drop, kanban board, and stats dashboard",
+  "scripts": {
+    "dev": "concurrently --names \"server,client\" --prefix-colors \"blue,green\" \"npm run dev:server\" \"npm run dev:client\"",
+    "dev:server": "cd Server && npm run dev",
+    "dev:client": "cd client && npm run dev",
+    "build": "cd client && npm run build",
+    "start": "cd Server && npm start",
+    "install:all": "cd Server && npm install && cd ../client && npm install",
+    "test": "cd Server && npm test",
+    "test:watch": "cd Server && npm run test:watch",
+    "lint": "cd client && npm run lint",
+    "docker:build": "docker compose build",
+    "docker:up": "docker compose up -d",
+    "docker:down": "docker compose down",
+    "docker:logs": "docker compose logs -f"
+  },
+  "devDependencies": {
+    "concurrently": "^9.1.2"
+  }
+}

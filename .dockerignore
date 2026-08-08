@@ -1,0 +1,15 @@
+node_modules/
+**/node_modules/
+dist/
+build/
+.env
+**/.env
+*.log
+.git/
+.github/
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+Server/tests/
+*.md
