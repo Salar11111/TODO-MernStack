@@ -12,11 +12,7 @@
     "install:all": "cd Server && npm install && cd ../client && npm install",
     "test": "cd Server && npm test",
     "test:watch": "cd Server && npm run test:watch",
-    "lint": "cd client && npm run lint",
-    "docker:build": "docker compose build",
-    "docker:up": "docker compose up -d",
-    "docker:down": "docker compose down",
-    "docker:logs": "docker compose logs -f"
+    "lint": "cd client && npm run lint"
   },
   "devDependencies": {
     "concurrently": "^9.1.2"
