@@ -89,6 +89,9 @@ app.use('/api/auth', authRoutes);
 app.use('/api/categories', categoryRoutes);
 app.use('/api/todos', todoRoutes);
 
+// 404 for unknown API routes (JSON, in every environment)
+app.use('/api', notFound);
+
 // Serve built client in production
 if (process.env.NODE_ENV === 'production') {
   const clientPath = path.join(__dirname, 'public');
@@ -99,11 +102,6 @@ if (process.env.NODE_ENV === 'production') {
   app.get('/*splat', (req, res) => {
     res.sendFile(path.join(clientPath, 'index.html'));
   });
-}
-
-// 404 for unknown API routes (only if not already handled by SPA fallback)
-if (process.env.NODE_ENV !== 'production') {
-  app.use(notFound);
 }
 
 // Custom Error Handling Middleware (MUST be last)

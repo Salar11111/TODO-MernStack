@@ -6,7 +6,14 @@ let connPromise;
 const ensureDb = async () => {
   if (mongoose.connection.readyState === 1) return;
   if (!connPromise) {
-    connPromise = mongoose.connect(process.env.MONGO_URI).catch((error) => {
+    connPromise = mongoose
+      .connect(process.env.MONGO_URI, {
+        // Fail fast so serverless platforms return an error response
+        // instead of killing the function on a slow/hung connection
+        serverSelectionTimeoutMS: 8000,
+        connectTimeoutMS: 8000,
+      })
+      .catch((error) => {
       connPromise = undefined; // allow retry on next invocation
       throw error;
     });
