@@ -13,6 +13,9 @@ const { notFound, errorHandler } = require('./middleware/errorMiddleware');
 
 const app = express();
 
+// Trust Vercel's proxy so rate limiting and secure cookies see real client IPs
+app.set('trust proxy', 1);
+
 // Security headers with a tuned Content Security Policy.
 // In development, 'unsafe-inline' is needed for Vite's injected styles.
 const isProd = process.env.NODE_ENV === 'production';
@@ -92,7 +95,8 @@ if (process.env.NODE_ENV === 'production') {
   app.use(express.static(clientPath));
 
   // SPA fallback — serve index.html for any non-API route
-  app.get('*', (req, res) => {
+  // (Express 5 / path-to-regexp v8 requires a named wildcard instead of '*')
+  app.get('/*splat', (req, res) => {
     res.sendFile(path.join(clientPath, 'index.html'));
   });
 }

@@ -1,5 +1,19 @@
 const mongoose = require('mongoose');
 
+let connPromise;
+
+// Cached connection for serverless environments (reused across warm invocations)
+const ensureDb = async () => {
+  if (mongoose.connection.readyState === 1) return;
+  if (!connPromise) {
+    connPromise = mongoose.connect(process.env.MONGO_URI).catch((error) => {
+      connPromise = undefined; // allow retry on next invocation
+      throw error;
+    });
+  }
+  await connPromise;
+};
+
 const connectDB = async () => {
   try {
     // Connect to MongoDB using the URI from our .env file
@@ -13,3 +27,4 @@ const connectDB = async () => {
 };
 
 module.exports = connectDB;
+module.exports.ensureDb = ensureDb;
