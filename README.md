@@ -1,115 +1,47 @@
-﻿# Task Master
+<div align="center">
 
-A full-stack productivity app for managing tasks, tracking priorities, and staying organized with a clean workflow-focused interface.
+# ✅ Task Master
 
-## Overview
+**A MERN productivity app with a dashboard, calendar and drag-and-drop task board.**
 
-Task Master is a modern TODO management platform built with the MERN stack. It gives users a simple way to organize work, track progress, and plan tasks through a responsive dashboard, calendar, and Kanban-style workflow.
+![React](https://img.shields.io/badge/React-19-149ECA?logo=react&logoColor=white)
+![Vite](https://img.shields.io/badge/Vite-8-646CFF?logo=vite&logoColor=white)
+![Express](https://img.shields.io/badge/Express-5-000000?logo=express&logoColor=white)
+![MongoDB](https://img.shields.io/badge/MongoDB-47A248?logo=mongodb&logoColor=white)
+![Tailwind](https://img.shields.io/badge/Tailwind-38BDF8?logo=tailwindcss&logoColor=white)
 
-## Why this project?
+</div>
 
-This app is designed to combine productivity and usability:
+---
 
-- simple, clean interface for everyday task management
-- organized structure for personal or team workflows
-- clear progress tracking with statuses, filters, and analytics
-- secure authentication and protected user data
-- flexible import and export for backups and migrations
+## ✨ Why Task Master?
 
-## Key Features
+To-do apps are easy to start and hard to keep tidy. Task Master tries to close that gap: create tasks, group them into categories, add due dates and subtasks, then view the same work as a list, a calendar or a Kanban-style board. Filters and a small dashboard make it practical for everyday use rather than just another demo.
 
-- User authentication and protected routes
-- Create, update, complete, and delete tasks
-- Organize tasks into categories
-- Add due dates and task metadata
-- Manage subtasks and task status
-- Drag and drop tasks between workflow stages
-- Filter tasks by status, category, and search term
-- View work in calendar and dashboard views
-- Export and import tasks in JSON or CSV format
-- Reset passwords through email-based recovery flow
-- Responsive layout for desktop and mobile devices
+The backend is a conventional Express + MongoDB API with JWT auth, Zod validation, Helmet, rate limiting and email-based password reset. The frontend pairs TanStack Query for server data with dnd-kit for dragging and Framer Motion for transitions — a small, readable stack that still covers the full loop.
 
-## Tech Stack
+### 🧩 What's inside
 
-### Frontend
-- React 19
-- Vite 8
-- Tailwind CSS
-- React Router
-- Framer Motion
-- TanStack Query
-- DnD Kit
+- 🔐 **User authentication and protected routes.**
+- ✅ **Create, update, complete and delete tasks**, with categories, due dates and metadata.
+- 🧩 **Subtasks and task status** for breaking work down.
+- 🖱️ **Drag and drop** tasks between workflow stages.
+- 🔍 **Filters** by status, category and search term.
+- 📅 **Calendar and dashboard views** of the same data.
+- 📤 **JSON and CSV import/export** for backups and migrations.
+- ✉️ **Password reset** through an email recovery flow.
+- 📱 **Responsive layout** for desktop and mobile.
 
-### Backend
-- Node.js
-- Express 5
-- MongoDB + Mongoose
-- JWT authentication
-- Zod validation
-- Helmet and rate limiting
-- Nodemailer
+---
 
-### Testing & tooling
-- Vitest
-- Supertest
-- ESLint
-- Docker Compose
+## 🚀 Quick start
 
-## Architecture
-
-```text
-Client (React + Vite)  <--->  API (Express)  <--->  MongoDB
-        |                              |
-        |                              +--> Auth, Todos, Categories
-        +--> JWT auth / protected routes
-```
-
-## Project Structure
-
-```bash
-TODO - LIST/
-├── client/                 # React frontend
-│   ├── src/
-│   ├── package.json
-│   ├── vite.config.js
-│   └── tailwind.config.js
-├── Server/                 # Express backend
-│   ├── config/
-│   ├── controllers/
-│   ├── middleware/
-│   ├── models/
-│   ├── routes/
-│   ├── services/
-│   ├── validation/
-│   ├── tests/
-│   └── package.json
-├── package.json
-├── README.md
-└── .gitignore
-```
-
-## Prerequisites
-
-Before running the project, make sure you have:
-
-- Node.js 20 or newer
-- npm 9 or newer
-- MongoDB running locally or an Atlas connection string
-- Git
-
-## Getting Started
-
-### 1. Install dependencies
-
-From the project root:
+Requirements: Node.js 20+, npm 9+, MongoDB (local or Atlas) and Git.
 
 ```bash
 npm install
 npm run install:all
 ```
-
-### 2. Configure environment variables
 
 Create the backend environment file:
 
@@ -117,8 +49,6 @@ Create the backend environment file:
 cd Server
 copy .env.example .env
 ```
-
-Then update the values in `.env`:
 
 ```env
 PORT=5000
@@ -136,20 +66,60 @@ SMTP_PASS=
 EMAIL_FROM=noreply@taskmaster.app
 ```
 
-### 3. Run the app
-
-Start both frontend and backend together:
+Start both the frontend and backend together:
 
 ```bash
 npm run dev
 ```
 
-Access the app at:
-
 - Frontend: http://localhost:5173
 - Backend: http://localhost:5000
 
-## Useful Scripts
+---
+
+## 🧱 Stack
+
+| Layer | Choice |
+| --- | --- |
+| Frontend | React 19, Vite 8, Tailwind CSS, React Router |
+| Interaction | Framer Motion, TanStack Query, dnd-kit |
+| Backend | Node.js, Express 5, MongoDB + Mongoose |
+| Auth / validation | JWT, Zod, Helmet, rate limiting, Nodemailer |
+| Testing / tooling | Vitest, Supertest, ESLint, Docker Compose |
+
+---
+
+## 🏗 Architecture
+
+```text
+Client (React + Vite)  <--->  API (Express)  <--->  MongoDB
+        |                          |
+        |                          +--> Auth, Todos, Categories
+        +--> JWT auth / protected routes
+```
+
+---
+
+## 🗂 Project structure
+
+```text
+TODO - LIST/
+├── client/                 # React frontend
+│   ├── src/
+│   ├── package.json
+│   ├── vite.config.js
+│   └── tailwind.config.js
+├── Server/                 # Express backend
+│   ├── config/ controllers/ middleware/ models/
+│   ├── routes/ services/ validation/ tests/
+│   └── package.json
+├── package.json
+└── README.md
+```
+
+---
+
+## ✅ Scripts
 
 | Location | Command | Purpose |
 | --- | --- | --- |
@@ -157,42 +127,36 @@ Access the app at:
 | Root | `npm run build` | Build the frontend for production |
 | Root | `npm run start` | Start the backend in production mode |
 | Root | `npm test` | Run backend tests |
-| Root | `npm run lint` | Run frontend lint checks |
-| Server | `npm run dev` | Start the API with nodemon |
-| Server | `npm test` | Run test suite |
-| Client | `npm run dev` | Start the Vite development server |
-| Client | `npm run build` | Create production build |
+| Root | `npm run lint` | Frontend lint checks |
+| Server | `npm run dev` | API with nodemon |
+| Server | `npm test` | Server test suite |
+| Client | `npm run dev` | Vite development server |
+| Client | `npm run build` | Production build |
 
-## Testing
+---
 
-Run the backend tests:
-
-```bash
-cd Server
-npm test
-```
-
-## Production
-
-Build the frontend and run the backend in production mode:
+## 🚢 Production
 
 ```bash
 npm run build
 npm start
 ```
 
-The server serves the built frontend and the API on port 5000. Make sure `NODE_ENV=production` and a valid `JWT_SECRET` are set in the server `.env` file.
+The server serves the built frontend and the API on port 5000. Make sure `NODE_ENV=production` and a valid `JWT_SECRET` are set in the server `.env`. Email password resets require valid SMTP credentials, and MongoDB must be running before the server starts.
 
-## Notes
+---
 
-- The frontend is configured to proxy API requests to the backend.
-- Email password resets require valid SMTP credentials in the server `.env` file.
-- Make sure MongoDB is running before starting the server.
+## 🗺 Roadmap ideas
 
-## License
+- 🧾 Richer task templates and recurring tasks
+- 🤝 Shared lists with per-member permissions
+- 📧 Digest emails for due dates
+- 🧪 More client-side test coverage
 
-This project is licensed under the ISC License.
+---
 
-## Contributing
+<div align="center">
 
-Contributions are welcome. Feel free to fork the project, create a feature branch, and submit a pull request.
+A clean, workflow-focused take on the everyday to-do list. Built with the MERN stack.
+
+</div>
