@@ -97,7 +97,7 @@ export default function CalendarPage() {
   if (isLoading) {
     return (
       <div>
-        <h1 className="text-3xl font-extrabold tracking-tight mb-6">Calendar</h1>
+        <h1 className="ui-page-title mb-6">Calendar</h1>
         <TodoSkeleton />
       </div>
     );
@@ -107,15 +107,15 @@ export default function CalendarPage() {
     <div>
       <header className="mb-6 flex items-center justify-between flex-wrap gap-3">
         <div>
-          <h1 className="text-3xl font-extrabold tracking-tight">Calendar</h1>
-          <p className="text-gray-600 dark:text-gray-400 mt-1">
+          <h1 className="ui-page-title">Calendar</h1>
+          <p className="ui-muted mt-1">
             Tasks with due dates shown by day
           </p>
         </div>
         <div className="flex items-center gap-2">
           <button
             onClick={prevMonth}
-            className="p-2 rounded-md border border-gray-300 dark:border-gray-700 text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+            className="ui-btn ui-btn-quiet ui-btn-sm w-10 p-0"
             aria-label="Previous month"
           >
             <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
@@ -127,7 +127,7 @@ export default function CalendarPage() {
           </span>
           <button
             onClick={nextMonth}
-            className="p-2 rounded-md border border-gray-300 dark:border-gray-700 text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+            className="ui-btn ui-btn-quiet ui-btn-sm w-10 p-0"
             aria-label="Next month"
           >
             <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
@@ -139,14 +139,14 @@ export default function CalendarPage() {
               setViewYear(today.getFullYear());
               setViewMonth(today.getMonth());
             }}
-            className="px-3 py-1.5 rounded-md text-xs font-medium border border-gray-300 dark:border-gray-700 text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+            className="ui-btn ui-btn-quiet ui-btn-sm"
           >
             Today
           </button>
         </div>
       </header>
 
-      <div className="bg-white dark:bg-gray-900 rounded-lg shadow-sm border border-gray-200 dark:border-gray-800 p-4">
+      <div className="ui-card p-4">
         {/* Weekday headers */}
         <div className="grid grid-cols-7 gap-1 mb-1">
           {WEEKDAYS.map((day) => (
@@ -191,7 +191,7 @@ export default function CalendarPage() {
                       <span
                         key={t._id}
                         className={cn(
-                          'text-[10px] leading-tight truncate px-1 py-0.5 rounded',
+                          'text-xs leading-tight truncate px-1 py-0.5 rounded',
                           hasOverdue && !t.isCompleted
                             ? 'bg-red-100 text-red-700 dark:bg-red-950 dark:text-red-300'
                             : t.isCompleted
@@ -203,7 +203,7 @@ export default function CalendarPage() {
                       </span>
                     ))}
                     {dayTodos.length > 2 && (
-                      <span className="text-[10px] text-gray-500">+{dayTodos.length - 2} more</span>
+                      <span className="text-xs text-gray-500">+{dayTodos.length - 2} more</span>
                     )}
                   </div>
                 )}
@@ -222,7 +222,7 @@ export default function CalendarPage() {
             exit={{ opacity: 0, height: 0 }}
             className="overflow-hidden"
           >
-            <div className="mt-4 bg-white dark:bg-gray-900 rounded-lg shadow-sm border border-gray-200 dark:border-gray-800 p-4">
+            <div className="mt-4 ui-card p-4">
               <div className="flex items-center justify-between mb-3">
                 <h3 className="font-semibold text-gray-800 dark:text-gray-200">
                   {new Date(selectedDate + 'T00:00:00').toLocaleDateString(undefined, {
