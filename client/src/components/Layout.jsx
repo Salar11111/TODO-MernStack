@@ -8,11 +8,7 @@ import Spinner from './Spinner';
 import KeyboardShortcutsHelp from './KeyboardShortcutsHelp';
 
 const navLinkClass = ({ isActive }) =>
-  `px-3 py-2 rounded-md text-sm font-medium transition-colors ${
-    isActive
-      ? 'bg-blue-600 text-white'
-      : 'text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-800'
-  }`;
+  `ui-nav-link ${isActive ? 'ui-nav-link-active' : ''}`;
 
 export default function Layout() {
   const { user, logout, initializing } = useAuth();
@@ -46,19 +42,19 @@ export default function Layout() {
       {/* Skip to content link for screen readers */}
       <a
         href="#main-content"
-        className="sr-only focus:not-sr-only focus:absolute focus:z-50 focus:top-2 focus:left-2 focus:px-3 focus:py-2 focus:bg-blue-600 focus:text-white focus:rounded-md"
+        className="sr-only focus:not-sr-only focus:absolute focus:z-50 focus:top-2 focus:left-2 focus:px-3 focus:py-2 focus:bg-[var(--accent)] focus:text-white focus:rounded-md"
       >
         Skip to content
       </a>
 
-      <header className="sticky top-0 z-20 bg-white/80 dark:bg-gray-900/80 backdrop-blur border-b border-gray-200 dark:border-gray-800">
-        <div className="max-w-3xl mx-auto px-4 py-3 flex items-center justify-between gap-4">
+      <header className="sticky top-0 z-20 bg-[var(--surface)] border-b border-[var(--line)]">
+        <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-4 py-3 sm:px-6">
           <div className="flex items-center gap-1">
             <NavLink to="/" className="flex items-center gap-2 mr-2">
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-7 w-7 text-blue-600 dark:text-blue-400" viewBox="0 0 24 24" fill="currentColor">
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-7 w-7 text-[var(--accent)]" viewBox="0 0 24 24" fill="currentColor">
                 <path fillRule="evenodd" d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12zm13.36-1.814a.75.75 0 10-1.22-.872l-3.236 4.53L9.53 12.22a.75.75 0 00-1.06 1.06l2.25 2.25a.75.75 0 001.14-.094l3.75-5.25z" clipRule="evenodd" />
               </svg>
-              <span className="text-lg font-extrabold tracking-tight hidden sm:block">Task Master</span>
+              <span className="hidden text-lg font-bold tracking-tight sm:block">Task Master</span>
             </NavLink>
             {/* Desktop nav */}
             <nav className="hidden sm:flex items-center gap-1">
@@ -81,7 +77,7 @@ export default function Layout() {
             {/* Keyboard shortcuts help */}
             <button
               onClick={() => setShortcutsOpen(true)}
-              className="hidden sm:block p-2 rounded-md text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-800 transition-colors"
+              className="ui-btn ui-btn-quiet ui-btn-sm hidden w-10 p-0 sm:inline-flex"
               aria-label="Keyboard shortcuts"
               title="Keyboard shortcuts (?)"
             >
@@ -93,7 +89,7 @@ export default function Layout() {
             {/* Dark mode toggle */}
             <button
               onClick={toggle}
-              className="p-2 rounded-md text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-800 transition-colors"
+              className="ui-btn ui-btn-quiet ui-btn-sm w-10 p-0"
               aria-label={dark ? 'Switch to light mode' : 'Switch to dark mode'}
               title={dark ? 'Light mode' : 'Dark mode'}
             >
@@ -110,16 +106,16 @@ export default function Layout() {
 
             {/* User avatar + name (desktop) */}
             <div className="hidden sm:flex items-center gap-2">
-              <div className="h-8 w-8 rounded-full bg-blue-600 text-white flex items-center justify-center text-sm font-bold">
+              <div className="h-8 w-8 rounded-full bg-[var(--accent)] text-white flex items-center justify-center text-sm font-bold">
                 {user.name?.charAt(0).toUpperCase()}
               </div>
-              <span className="text-sm font-medium text-gray-700 dark:text-gray-200">{user.name}</span>
+              <span className="text-sm font-medium text-[var(--ink)]">{user.name}</span>
             </div>
 
             {/* Logout (desktop) */}
             <button
               onClick={logout}
-              className="hidden sm:block px-3 py-2 rounded-md text-sm font-medium text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-950 transition-colors"
+              className="ui-btn ui-btn-quiet ui-btn-danger hidden sm:inline-flex"
             >
               Logout
             </button>
@@ -127,7 +123,7 @@ export default function Layout() {
             {/* Mobile hamburger menu */}
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="sm:hidden p-2 rounded-md text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-800 transition-colors"
+              className="ui-btn ui-btn-quiet ui-btn-sm w-10 p-0 sm:hidden"
               aria-label="Toggle menu"
               aria-expanded={mobileMenuOpen}
             >
@@ -150,14 +146,14 @@ export default function Layout() {
               animate={{ height: 'auto', opacity: 1 }}
               exit={{ height: 0, opacity: 0 }}
               transition={{ duration: 0.15 }}
-              className="sm:hidden overflow-hidden border-t border-gray-200 dark:border-gray-800"
+              className="sm:hidden overflow-hidden border-t border-[var(--line)]"
             >
               <div className="px-4 py-3 space-y-2">
-                <div className="flex items-center gap-2 pb-2 border-b border-gray-200 dark:border-gray-800">
-                  <div className="h-8 w-8 rounded-full bg-blue-600 text-white flex items-center justify-center text-sm font-bold">
+                <div className="flex items-center gap-2 border-b border-[var(--line)] pb-2">
+                  <div className="h-8 w-8 rounded-full bg-[var(--accent)] text-white flex items-center justify-center text-sm font-bold">
                     {user.name?.charAt(0).toUpperCase()}
                   </div>
-                  <span className="text-sm font-medium text-gray-700 dark:text-gray-200">{user.name}</span>
+                  <span className="text-sm font-medium text-[var(--ink)]">{user.name}</span>
                 </div>
                 <nav className="flex flex-col gap-1">
                   <NavLink
@@ -195,7 +191,7 @@ export default function Layout() {
                     setMobileMenuOpen(false);
                     logout();
                   }}
-                  className="w-full text-left px-3 py-2 rounded-md text-sm font-medium text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-950 transition-colors"
+                  className="ui-btn ui-btn-quiet ui-btn-danger w-full"
                 >
                   Logout
                 </button>
@@ -205,7 +201,7 @@ export default function Layout() {
         </AnimatePresence>
       </header>
 
-      <main id="main-content" className="max-w-3xl mx-auto px-4 py-6 sm:py-8">
+      <main id="main-content" className="mx-auto max-w-7xl px-4 py-6 sm:px-6 sm:py-8">
         <Outlet />
       </main>
 
