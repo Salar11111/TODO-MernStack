@@ -18,9 +18,9 @@ import { Badge } from '../components/ui/Badge';
 import { TodoSkeleton } from '../components/ui/Skeleton';
 
 const COLUMNS = [
-  { id: 'todo', title: 'To Do', accent: 'border-t-gray-400' },
-  { id: 'in-progress', title: 'In Progress', accent: 'border-t-blue-500' },
-  { id: 'done', title: 'Done', accent: 'border-t-green-500' },
+  { id: 'todo', title: 'To Do', tone: 'var(--line-strong)' },
+  { id: 'in-progress', title: 'In Progress', tone: 'var(--accent)' },
+  { id: 'done', title: 'Done', tone: 'var(--status-good)' },
 ];
 
 const priorityVariant = { high: 'red', medium: 'yellow', low: 'green' };
@@ -42,9 +42,7 @@ function KanbanCard({ todo, overlay = false, categoryMap = {} }) {
       style={style}
       {...attributes}
       {...listeners}
-      className={`bg-white dark:bg-gray-800 p-3 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 cursor-grab active:cursor-grabbing ${
-        overlay ? 'shadow-lg rotate-2' : ''
-      }`}
+      className={`kanban-card ${overlay ? 'border-[var(--accent)]' : ''}`}
     >
       <p className={`font-medium text-sm break-words ${todo.isCompleted ? 'line-through text-gray-400' : 'text-gray-800 dark:text-gray-100'}`}>
         {todo.title}
@@ -60,7 +58,7 @@ function KanbanCard({ todo, overlay = false, categoryMap = {} }) {
           <Badge variant="gray">Due {todo.dueDate.slice(0, 10)}</Badge>
         )}
         {(todo.tags || []).slice(0, 2).map((tag) => (
-          <Badge key={tag} variant="purple">#{tag}</Badge>
+          <Badge key={tag} variant="gray">#{tag}</Badge>
         ))}
         {todo.category && categoryMap[todo.category] && (
           <span
@@ -79,19 +77,20 @@ function KanbanColumn({ column, todos, categoryMap }) {
   const { setNodeRef, isOver } = useDroppable({ id: column.id });
 
   return (
-    <div className={`flex-1 min-w-[260px] bg-gray-100 dark:bg-gray-900/50 rounded-lg p-3 flex flex-col border-t-4 ${column.accent} transition-colors ${isOver ? 'ring-2 ring-blue-400' : ''}`}>
-      <div className="flex items-center justify-between mb-3">
-        <h3 className="font-semibold text-sm text-gray-700 dark:text-gray-200">{column.title}</h3>
-        <span className="text-xs font-medium text-gray-500 bg-gray-200 dark:bg-gray-700 px-2 py-0.5 rounded-full">
-          {todos.length}
-        </span>
+    <div
+      className={`kanban-lane ${isOver ? 'border-[var(--accent)]' : ''}`}
+      style={{ '--lane-color': column.tone }}
+    >
+      <div className="flex items-center justify-between mb-1">
+        <h3 className="font-semibold text-sm text-[var(--ink)]">{column.title}</h3>
+        <span className="ui-badge ui-badge-neutral">{todos.length}</span>
       </div>
       <div ref={setNodeRef} className="flex flex-col gap-2 flex-1 min-h-[100px]">
         {todos.map((todo) => (
           <KanbanCard key={todo._id} todo={todo} categoryMap={categoryMap} />
         ))}
         {todos.length === 0 && (
-          <div className="text-center text-xs text-gray-400 py-8 border border-dashed border-gray-300 dark:border-gray-700 rounded-md">
+          <div className="py-8 text-center text-sm text-[var(--muted)] border border-dashed border-[var(--line)] rounded-md">
             Drop tasks here
           </div>
         )}
@@ -157,10 +156,10 @@ export default function KanbanPage() {
   if (isLoading) {
     return (
       <div>
-        <h1 className="text-3xl font-extrabold tracking-tight mb-6">Board</h1>
-        <div className="flex gap-4 overflow-x-auto pb-4">
+        <h1 className="ui-page-title mb-6">Board</h1>
+        <div className="kanban-board">
           {COLUMNS.map((col) => (
-            <div key={col.id} className="flex-1 min-w-[260px] space-y-2">
+            <div key={col.id} className="space-y-2">
               <TodoSkeleton />
               <TodoSkeleton />
             </div>
@@ -173,8 +172,8 @@ export default function KanbanPage() {
   return (
     <div>
       <header className="mb-6">
-        <h1 className="text-3xl font-extrabold tracking-tight">Board</h1>
-        <p className="text-gray-600 dark:text-gray-400 mt-1">
+        <h1 className="ui-page-title">Board</h1>
+        <p className="ui-muted mt-1">
           Drag tasks between columns to update their status
         </p>
       </header>
@@ -186,7 +185,7 @@ export default function KanbanPage() {
         onDragEnd={handleDragEnd}
         onDragCancel={() => setActiveId(null)}
       >
-        <div className="flex gap-4 overflow-x-auto pb-4">
+        <div className="kanban-board">
           {COLUMNS.map((column) => (
             <KanbanColumn key={column.id} column={column} todos={grouped[column.id] || []} categoryMap={categoryMap} />
           ))}
