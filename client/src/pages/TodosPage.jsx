@@ -201,8 +201,8 @@ function TodosPage() {
     <div>
       <header className="mb-6 flex flex-wrap items-center justify-between gap-3">
         <div>
-          <h1 className="text-3xl font-extrabold tracking-tight">My Tasks</h1>
-          <p className="text-gray-600 dark:text-gray-400 mt-1" role="status" aria-live="polite">
+          <h1 className="ui-page-title">My Tasks</h1>
+          <p className="ui-muted mt-1" role="status" aria-live="polite">
             {todos.length} task{todos.length === 1 ? '' : 's'} shown
           </p>
         </div>
@@ -210,7 +210,7 @@ function TodosPage() {
           <div className="relative" ref={exportMenuRef}>
             <button
               onClick={() => setExportMenuOpen(!exportMenuOpen)}
-              className="px-3 py-2 rounded-md text-sm font-medium border border-gray-300 dark:border-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors inline-flex items-center gap-1.5"
+              className="ui-btn ui-btn-quiet"
               aria-label="Export or import tasks"
               aria-expanded={exportMenuOpen}
               aria-haspopup="true"
@@ -226,13 +226,13 @@ function TodosPage() {
                 <div className="absolute right-0 mt-1 z-20 w-48 bg-white dark:bg-gray-900 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 py-1">
                   <button
                     onClick={() => handleExport('csv')}
-                    className="w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+                    className="ui-btn ui-btn-quiet ui-btn-sm w-full justify-start"
                   >
                     Export CSV
                   </button>
                   <button
                     onClick={() => handleExport('json')}
-                    className="w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+                    className="ui-btn ui-btn-quiet ui-btn-sm w-full justify-start"
                   >
                     Export JSON
                   </button>
@@ -242,7 +242,7 @@ function TodosPage() {
                       setExportMenuOpen(false);
                       fileInputRef.current?.click();
                     }}
-                    className="w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+                    className="ui-btn ui-btn-quiet ui-btn-sm w-full justify-start"
                   >
                     Import File
                   </button>
@@ -262,7 +262,7 @@ function TodosPage() {
 
       {/* Completion progress bar */}
       {totalTasks > 0 && (
-        <div className="mb-6 bg-white dark:bg-gray-900 rounded-lg shadow-sm border border-gray-200 dark:border-gray-800 p-4">
+        <div className="ui-card mb-6 p-4">
           <div className="flex items-center justify-between mb-2">
             <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Progress</span>
             <span className="text-sm font-medium text-gray-600 dark:text-gray-400">
@@ -271,7 +271,7 @@ function TodosPage() {
           </div>
           <div className="w-full h-2.5 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
             <div
-              className="h-full bg-gradient-to-r from-blue-500 to-green-500 rounded-full transition-all duration-500 ease-out"
+              className="h-full rounded-full bg-[var(--accent)] transition-all duration-500 ease-out"
               style={{ width: `${completionRate}%` }}
               role="progressbar"
               aria-valuenow={completionRate}
@@ -284,9 +284,9 @@ function TodosPage() {
       )}
 
       {isError && (
-        <div className="bg-red-100 dark:bg-red-950 border border-red-400 dark:border-red-800 text-red-700 dark:text-red-300 px-4 py-3 rounded mb-6" role="alert">
+        <div className="ui-alert mb-6" role="alert">
           <p>{error?.message || 'Failed to load tasks.'}</p>
-          <button onClick={() => refetch()} className="underline mt-1 font-semibold">
+          <button onClick={() => refetch()} className="ui-link mt-1 text-sm">
             Try Again
           </button>
         </div>
@@ -336,7 +336,7 @@ function TodosPage() {
           <TodoSkeleton />
         </ul>
       ) : isEmptyPage ? (
-        <div className="text-center py-10 bg-white dark:bg-gray-900 rounded-lg border border-dashed border-gray-300 dark:border-gray-700">
+        <div className="ui-card border-dashed py-10 text-center">
           <p className="text-gray-500 dark:text-gray-400">
             You&apos;re past the last page of tasks.
           </p>
@@ -390,7 +390,7 @@ function TodosPage() {
             initial={{ y: 80, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             exit={{ y: 80, opacity: 0 }}
-            className="fixed bottom-4 left-1/2 -translate-x-1/2 z-30 bg-gray-900 dark:bg-gray-800 text-white rounded-xl shadow-2xl px-4 py-3 flex items-center gap-2 flex-wrap justify-center max-w-[calc(100vw-2rem)]"
+            className="ui-card fixed bottom-4 left-1/2 z-30 flex max-w-[calc(100vw-2rem)] -translate-x-1/2 flex-wrap items-center justify-center gap-2 px-4 py-3 shadow-lg"
           >
             <span className="text-sm font-medium mr-2">{selectedCount} selected</span>
             <Button size="sm" variant="secondary" onClick={handleBulkComplete} loading={bulkUpdate.isPending}>
@@ -399,7 +399,7 @@ function TodosPage() {
             <select
               value={bulkPriority}
               onChange={handleBulkPriority}
-              className="px-2 py-1.5 text-sm rounded-md bg-gray-700 text-white border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="ui-input ui-btn-sm"
               aria-label="Change priority"
             >
               <option value="">Priority…</option>
@@ -410,7 +410,7 @@ function TodosPage() {
             <select
               value={bulkCategory}
               onChange={handleBulkCategory}
-              className="px-2 py-1.5 text-sm rounded-md bg-gray-700 text-white border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500 max-w-[140px]"
+              className="ui-input ui-btn-sm max-w-[140px]"
               aria-label="Change category"
             >
               <option value="">Category…</option>
@@ -424,7 +424,7 @@ function TodosPage() {
             </Button>
             <button
               onClick={clearSelection}
-              className="text-gray-400 hover:text-white p-1.5"
+              className="ui-btn ui-btn-quiet ui-btn-sm w-9 p-0"
               aria-label="Clear selection"
             >
               <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
