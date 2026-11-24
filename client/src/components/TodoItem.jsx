@@ -24,25 +24,24 @@ function dueBadge(todo) {
   const label = date.toLocaleDateString(undefined, { month: 'short', day: 'numeric' });
 
   if (todo.isCompleted) {
-    return { label, className: 'bg-gray-100 text-gray-600 dark:bg-gray-800 dark:text-gray-400' };
+    return { label, className: 'ui-badge ui-badge-neutral' };
   }
   if (date.getTime() === today.getTime()) {
-    return { label: 'Due today', className: 'bg-amber-100 text-amber-800 dark:bg-amber-950 dark:text-amber-300' };
+    return { label: 'Due today', className: 'ui-badge ui-badge-warn' };
   }
   if (date < today) {
-    return { label: `Overdue: ${label}`, className: 'bg-red-100 text-red-800 dark:bg-red-950 dark:text-red-300' };
+    return { label: `Overdue: ${label}`, className: 'ui-badge ui-badge-danger' };
   }
-  return { label: `Due ${label}`, className: 'bg-blue-100 text-blue-800 dark:bg-blue-950 dark:text-blue-300' };
+  return { label: `Due ${label}`, className: 'ui-badge ui-badge-accent' };
 }
 
 const priorityBadge = {
-  high: 'bg-red-100 text-red-800 dark:bg-red-950 dark:text-red-300',
-  medium: 'bg-yellow-100 text-yellow-800 dark:bg-yellow-950 dark:text-yellow-300',
-  low: 'bg-green-100 text-green-800 dark:bg-green-950 dark:text-green-300',
+  high: 'ui-badge ui-badge-danger',
+  medium: 'ui-badge ui-badge-warn',
+  low: 'ui-badge ui-badge-good',
 };
 
-const inputClass =
-  'w-full px-3 py-2 border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500';
+const inputClass = 'ui-input';
 
 export function TodoItemContent({
   todo,
@@ -166,7 +165,7 @@ export function TodoItemContent({
       <li
         ref={setNodeRef}
         style={style}
-        className="bg-white dark:bg-gray-900 p-4 rounded-lg shadow-sm border border-blue-300 dark:border-blue-800"
+        className="ui-card border-[var(--accent)] p-4"
       >
         <div className="space-y-3">
           <div>
@@ -243,7 +242,7 @@ export function TodoItemContent({
               </div>
 
           {error && (
-            <div className="bg-red-100 dark:bg-red-950 border border-red-400 dark:border-red-800 text-red-700 dark:text-red-300 px-3 py-2 rounded text-sm" role="alert">
+            <div className="ui-alert" role="alert">
               {error}
             </div>
           )}
@@ -252,14 +251,14 @@ export function TodoItemContent({
             <button
               onClick={handleSaveEdit}
               disabled={updateTodo.isPending}
-              className="flex-1 bg-blue-600 text-white font-semibold py-2 px-3 rounded-md hover:bg-blue-700 disabled:opacity-50"
+              className="ui-btn ui-btn-primary flex-1"
             >
               {updateTodo.isPending ? 'Saving...' : 'Save'}
             </button>
             <button
               onClick={handleCancelEdit}
               disabled={updateTodo.isPending}
-              className="flex-1 bg-gray-400 text-white font-semibold py-2 px-3 rounded-md hover:bg-gray-500 disabled:opacity-50"
+              className="ui-btn ui-btn-quiet flex-1"
             >
               Cancel
             </button>
@@ -274,9 +273,7 @@ export function TodoItemContent({
     <li
       ref={setNodeRef}
       style={style}
-      className={`bg-white dark:bg-gray-900 p-4 rounded-lg shadow-sm border border-gray-200 dark:border-gray-800 flex flex-col gap-3 transition-all hover:shadow-md ${
-        isDragging ? 'opacity-60 shadow-lg' : ''
-      }`}
+      className={`ui-card flex flex-col gap-3 p-4 ${isDragging ? 'opacity-60' : ''}`}
     >
       <div className="flex items-start gap-3">
         {dragHandleProps && (
@@ -321,22 +318,16 @@ export function TodoItemContent({
           )}
 
           <div className="flex flex-wrap items-center gap-2 mt-2">
-            <span className={`inline-block text-xs px-2 py-1 rounded-full font-medium ${priorityBadge[todo.priority]}`}>
+            <span className={priorityBadge[todo.priority] || 'ui-badge ui-badge-neutral'}>
               {todo.priority} priority
             </span>
-            {badge && (
-              <span className={`inline-block text-xs px-2 py-1 rounded-full font-medium ${badge.className}`}>
-                {badge.label}
-              </span>
-            )}
+            {badge && <span className={badge.className}>{badge.label}</span>}
             {(todo.tags || []).map((tag) => (
-              <span key={tag} className="inline-block text-xs px-2 py-1 rounded-full bg-purple-100 text-purple-800 dark:bg-purple-950 dark:text-purple-300 font-medium">
-                #{tag}
-              </span>
+              <span key={tag} className="ui-badge ui-badge-neutral">#{tag}</span>
             ))}
             {todo.category && categoryMap[todo.category] && (
               <span
-                className="inline-block text-xs px-2 py-1 rounded-full font-medium text-white"
+                className="ui-badge text-white"
                 style={{ backgroundColor: categoryMap[todo.category].color }}
               >
                 {categoryMap[todo.category].name}
@@ -348,7 +339,7 @@ export function TodoItemContent({
         <div className="flex gap-1">
           <button
             onClick={() => setIsEditing(true)}
-            className="text-blue-500 hover:text-blue-700 hover:bg-blue-50 dark:hover:bg-blue-950 p-2 rounded-md transition-colors"
+            className="ui-btn ui-btn-quiet ui-btn-sm w-9 p-0 text-[var(--accent)]"
             aria-label={`Edit task: ${todo.title}`}
           >
             <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
@@ -358,11 +349,7 @@ export function TodoItemContent({
           <button
             onClick={handleDelete}
             disabled={deleteTodo.isPending}
-            className={`p-2 rounded-md transition-colors ${
-              confirmDelete
-                ? 'bg-red-600 text-white hover:bg-red-700'
-                : 'text-red-500 hover:text-red-700 hover:bg-red-50 dark:hover:bg-red-950'
-            }`}
+            className={`ui-btn ui-btn-sm w-9 p-0 ${confirmDelete ? 'ui-btn-confirm' : 'ui-btn-quiet ui-btn-danger'}`}
             aria-label={`Delete task: ${todo.title}`}
           >
             {confirmDelete ? (
@@ -394,7 +381,7 @@ export function TodoItemContent({
               </span>
               <button
                 onClick={() => removeSubtask(index)}
-                className="text-gray-400 hover:text-red-500 opacity-0 group-hover:opacity-100 transition-opacity"
+                className="p-1 text-[var(--muted)] hover:text-[var(--status-danger)] transition-colors"
                 aria-label={`Delete subtask: ${subtask.title}`}
               >
                 <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
@@ -419,12 +406,12 @@ export function TodoItemContent({
           onChange={(e) => setNewSubtask(e.target.value)}
           maxLength={100}
           placeholder="+ Add subtask"
-          className="flex-1 px-3 py-1.5 text-sm border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+          className="ui-input ui-btn-sm flex-1"
         />
         <button
           type="submit"
           disabled={!newSubtask.trim()}
-          className="px-3 py-1.5 text-sm bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 rounded-md hover:bg-gray-200 dark:hover:bg-gray-700 disabled:opacity-50"
+          className="ui-btn ui-btn-quiet ui-btn-sm"
         >
           Add
         </button>
