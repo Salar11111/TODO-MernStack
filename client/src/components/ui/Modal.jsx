@@ -27,7 +27,7 @@ export function Modal({ open, onClose, title, children, className }) {
   return (
     <div
       ref={overlayRef}
-      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm animate-in fade-in"
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/55 animate-in fade-in"
       onClick={(e) => {
         if (e.target === overlayRef.current) onClose();
       }}
@@ -37,7 +37,7 @@ export function Modal({ open, onClose, title, children, className }) {
     >
       <div
         className={cn(
-          'w-full max-w-lg bg-white dark:bg-gray-900 rounded-xl shadow-xl border border-gray-200 dark:border-gray-800 p-6',
+          'ui-card w-full max-w-lg p-6',
           className
         )}
       >
