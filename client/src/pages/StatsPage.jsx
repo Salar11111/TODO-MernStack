@@ -2,24 +2,25 @@ import { Link } from 'react-router-dom';
 import { useStatsQuery } from '../hooks/useTodos';
 import Spinner from '../components/Spinner';
 
-const cardClass =
-  'bg-white dark:bg-gray-900 rounded-lg shadow-sm border border-gray-200 dark:border-gray-800 p-5';
+const cardClass = 'ui-card p-5';
 
 function SummaryCards({ stats }) {
   const cards = [
-    { label: 'Total tasks', value: stats.total, color: 'text-gray-900 dark:text-gray-100' },
-    { label: 'Active', value: stats.active, color: 'text-blue-600 dark:text-blue-400' },
-    { label: 'Completed', value: stats.completed, color: 'text-green-600 dark:text-green-400' },
-    { label: 'Overdue', value: stats.overdue, color: 'text-red-600 dark:text-red-400' },
-    { label: 'Completion rate', value: `${stats.completionRate}%`, color: 'text-purple-600 dark:text-purple-400' },
+    { label: 'Total tasks', value: stats.total, tone: 'var(--ink)', lead: true },
+    { label: 'Active', value: stats.active, tone: 'var(--accent)' },
+    { label: 'Completed', value: stats.completed, tone: 'var(--status-good)' },
+    { label: 'Overdue', value: stats.overdue, tone: 'var(--status-danger)' },
+    { label: 'Completion rate', value: `${stats.completionRate}%`, tone: 'var(--accent)' },
   ];
 
   return (
-    <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3">
+    <div className="bento-stats">
       {cards.map((card) => (
-        <div key={card.label} className={cardClass}>
-          <p className={`text-2xl font-extrabold ${card.color}`}>{card.value}</p>
-          <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">{card.label}</p>
+        <div key={card.label} className={`${cardClass} ${card.lead ? 'bento-lead' : 'bento-item'}`}>
+          <p className="text-3xl font-bold tracking-tight" style={{ color: card.tone }}>
+            {card.value}
+          </p>
+          <p className="bento-copy mt-1">{card.label}</p>
         </div>
       ))}
     </div>
@@ -42,7 +43,7 @@ function ActivityChart({ activity }) {
                 className={`w-full rounded-t ${count > 0 ? 'bg-blue-500 dark:bg-blue-400' : 'bg-gray-200 dark:bg-gray-700'}`}
                 style={{ height: `${Math.max(4, height)}%` }}
               />
-              <span className="text-[10px] text-gray-500 truncate">
+              <span className="text-xs text-gray-500 truncate">
                 {new Date(`${date}T00:00:00`).toLocaleDateString(undefined, { weekday: 'short' })}
               </span>
             </div>
@@ -111,8 +112,8 @@ function StatsPage() {
   return (
     <div>
       <header className="mb-6">
-        <h1 className="text-3xl font-extrabold tracking-tight">Your Stats</h1>
-        <p className="text-gray-600 dark:text-gray-400 mt-1">
+        <h1 className="ui-page-title">Your Stats</h1>
+        <p className="ui-muted mt-1">
           A snapshot of how you&apos;re doing.
         </p>
       </header>
