@@ -10,20 +10,14 @@ export const Select = forwardRef(function Select(
   return (
     <div className="w-full">
       {label && (
-        <label htmlFor={selectId} className="block text-sm font-medium mb-1 text-gray-700 dark:text-gray-300">
+        <label htmlFor={selectId} className="ui-label">
           {label}
         </label>
       )}
       <select
         ref={ref}
         id={selectId}
-        className={cn(
-          'w-full px-3 py-2 border rounded-md bg-white dark:bg-gray-800 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500',
-          error
-            ? 'border-red-400 dark:border-red-600'
-            : 'border-gray-300 dark:border-gray-700',
-          className
-        )}
+        className={cn('ui-input', error && 'ui-input-error', className)}
         aria-invalid={!!error}
         aria-describedby={error ? `${selectId}-error` : undefined}
         {...props}
