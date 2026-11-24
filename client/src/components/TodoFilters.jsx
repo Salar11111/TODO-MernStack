@@ -1,9 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 
-const selectClass =
-  'px-3 py-2 border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500';
-
-const labelClass = 'block text-sm font-medium mb-1';
+const selectClass = 'ui-input';
+const labelClass = 'ui-label';
 
 export default function TodoFilters({
   filters,
@@ -46,7 +44,7 @@ export default function TodoFilters({
   };
 
   return (
-    <div className="bg-white dark:bg-gray-900 p-4 rounded-lg shadow-md border border-gray-200 dark:border-gray-800 mb-6">
+    <div className="ui-card mb-6 p-4">
       <div className="flex flex-wrap gap-3">
         <div className="flex-1 min-w-[220px]">
           <label htmlFor="search" className={labelClass}>
@@ -58,7 +56,7 @@ export default function TodoFilters({
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             placeholder="Search tasks..."
-            className="w-full px-3 py-2 border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="ui-input"
           />
         </div>
 
@@ -153,7 +151,7 @@ export default function TodoFilters({
         <div className="mt-3">
           <button
             onClick={handleReset}
-            className="text-sm font-medium text-blue-600 dark:text-blue-400 hover:underline"
+            className="ui-link text-sm"
           >
             Clear filters
           </button>
