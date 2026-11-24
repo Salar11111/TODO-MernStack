@@ -55,7 +55,7 @@ function TodoForm({ onCreated, categoryId }) {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="bg-white dark:bg-gray-900 p-6 rounded-lg shadow-md border border-gray-200 dark:border-gray-800 mb-6">
+    <form onSubmit={handleSubmit} className="ui-card mb-6 p-5">
       {/* Collapsible quick-add or expanded form */}
       <div className="flex gap-2">
         <Input
@@ -70,7 +70,7 @@ function TodoForm({ onCreated, categoryId }) {
         <button
           type="button"
           onClick={() => setExpanded(!expanded)}
-          className="px-3 py-2 rounded-md text-sm font-medium text-gray-600 dark:text-gray-300 border border-gray-300 dark:border-gray-700 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+          className="ui-btn ui-btn-quiet w-11 p-0"
           aria-label={expanded ? 'Show less options' : 'Show more options'}
           title={expanded ? 'Less options' : 'More options'}
         >
@@ -126,7 +126,7 @@ function TodoForm({ onCreated, categoryId }) {
               </div>
 
               {error && (
-                <div className="bg-red-100 dark:bg-red-950 border border-red-400 dark:border-red-800 text-red-700 dark:text-red-300 px-3 py-2 rounded text-sm" role="alert">
+                <div className="ui-alert" role="alert">
                   {error}
                 </div>
               )}
