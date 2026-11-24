@@ -34,6 +34,14 @@ The backend is a conventional Express + MongoDB API with JWT auth, Zod validatio
 
 ---
 
+## 📸 Screenshots
+
+| Task list | Kanban board |
+| --- | --- |
+| ![Task Master task list](docs/screenshots/dashboard.jpg) | ![Task Master Kanban board](docs/screenshots/board.jpg) |
+
+---
+
 ## 🚀 Quick start
 
 Requirements: Node.js 20+, npm 9+, MongoDB (local or Atlas) and Git.
