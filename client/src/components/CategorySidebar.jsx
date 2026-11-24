@@ -9,7 +9,7 @@ const PRESET_COLORS = [
   '#EF4444', // red
   '#10B981', // green
   '#F59E0B', // amber
-  '#8B5CF6', // violet
+  '#0891B2', // cyan (no violet in the system)
   '#EC4899', // pink
   '#6366F1', // indigo
   '#14B8A6', // teal
@@ -73,12 +73,12 @@ export default function CategorySidebar({
   const totalCount = categories.reduce((sum, c) => sum + (c._count ?? 0), 0);
 
   return (
-    <aside className="bg-white dark:bg-gray-900 rounded-lg shadow-sm border border-gray-200 dark:border-gray-800 p-4 mb-6">
+    <aside className="ui-card mb-6 p-4">
       <div className="flex items-center justify-between mb-3">
         <h2 className="text-sm font-semibold text-gray-700 dark:text-gray-200">Categories</h2>
         <button
           onClick={() => setIsAdding(!isAdding)}
-          className="p-1 rounded text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+          className="ui-btn ui-btn-quiet ui-btn-sm w-9 p-0"
           aria-label="Add category"
           title="Add category"
         >
@@ -93,7 +93,7 @@ export default function CategorySidebar({
         onClick={() => onSelectCategory(null)}
         className={`w-full text-left px-3 py-2 rounded-md text-sm flex items-center gap-2 transition-colors ${
           activeCategoryId === null
-            ? 'bg-blue-50 dark:bg-blue-950 text-blue-700 dark:text-blue-300 font-medium'
+            ? 'ui-nav-link-active font-medium'
             : 'text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800'
         }`}
       >
@@ -152,7 +152,7 @@ export default function CategorySidebar({
                   onClick={() => onSelectCategory(cat._id)}
                   className={`w-full text-left px-3 py-2 rounded-md text-sm flex items-center gap-2 transition-colors ${
                     activeCategoryId === cat._id
-                      ? 'bg-blue-50 dark:bg-blue-950 text-blue-700 dark:text-blue-300 font-medium'
+                      ? 'ui-nav-link-active font-medium'
                       : 'text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800'
                   }`}
                 >
