@@ -1,8 +1,11 @@
 import axios from 'axios';
 
-// Base URL is served through the Vite dev proxy (/api -> http://localhost:5000)
+// Same-origin by default (Vite proxy / API's static hosting). VITE_API_URL can
+// point a production build at an API on another origin, e.g. http://localhost:5011/api.
+const API_BASE_URL = (import.meta.env.VITE_API_URL || '/api').replace(/\/$/, '');
+
 const api = axios.create({
-  baseURL: '/api',
+  baseURL: API_BASE_URL,
   headers: {
     'Content-Type': 'application/json',
   },
@@ -22,6 +25,26 @@ api.interceptors.request.use(
   (error) => Promise.reject(error)
 );
 
+// Broadcast reachability changes so the UI can show one honest "server
+// unavailable" banner (no offline queue is implied).
+let serverAvailable = true;
+const setServerAvailable = (available) => {
+  if (serverAvailable === available || typeof window === 'undefined') return;
+  serverAvailable = available;
+  window.dispatchEvent(new CustomEvent('api-availability', { detail: { available } }));
+};
+
+// Auth calls that must never trigger a refresh loop. "/auth/me" is deliberately
+// absent: it is the request that normally detects an expired access token.
+const NO_REFRESH_PATHS = [
+  '/auth/login',
+  '/auth/register',
+  '/auth/refresh',
+  '/auth/forgot-password',
+  '/auth/reset-password',
+  '/auth/logout',
+];
+
 // Track refresh state to avoid multiple simultaneous refresh calls
 let isRefreshing = false;
 let failedQueue = [];
@@ -39,18 +62,23 @@ const processQueue = (error, token = null) => {
 
 // Normalize errors into friendly messages
 api.interceptors.response.use(
-  (response) => response,
+  (response) => {
+    setServerAvailable(true);
+    return response;
+  },
   async (error) => {
     const originalRequest = error.config;
 
     // Network error
     if (!error.response) {
+      setServerAvailable(false);
       error.message = 'Network error. Please check your connection.';
       return Promise.reject(error);
     }
 
     // Attempt to refresh the access token on 401 (once per request)
-    if (error.response.status === 401 && !originalRequest._retry && !originalRequest.url.includes('/auth/')) {
+    const skipRefresh = NO_REFRESH_PATHS.some((path) => originalRequest.url?.includes(path));
+    if (error.response.status === 401 && !originalRequest._retry && !skipRefresh) {
       if (isRefreshing) {
         // Queue this request until the ongoing refresh finishes
         return new Promise((resolve, reject) => {
@@ -67,7 +95,9 @@ api.interceptors.response.use(
       isRefreshing = true;
 
       try {
-        const res = await axios.post('/api/auth/refresh', {}, { withCredentials: true });
+        // Use the configured instance so a custom VITE_API_URL is honoured and
+        // the refresh cookie is sent with credentials.
+        const res = await api.post('/auth/refresh', {}, { withCredentials: true });
         const newToken = res.data.token;
         localStorage.setItem('todo-token', newToken);
         processQueue(null, newToken);
@@ -85,15 +115,20 @@ api.interceptors.response.use(
       }
     }
 
-    // Friendly messages for other statuses
-    if (error.response.status === 400) {
-      error.message = error.response.data?.message || 'Invalid request';
-    } else if (error.response.status === 401) {
+    // Prefer the server's message (validation/auth failures), with friendly
+    // fallbacks so toasts never show raw Axios status text.
+    const status = error.response.status;
+    const serverMessage = error.response.data?.message;
+    if (typeof serverMessage === 'string' && serverMessage) {
+      error.message = serverMessage;
+    } else if (status === 401) {
       error.message = 'Session expired. Please log in again.';
-    } else if (error.response.status === 404) {
-      error.message = 'Task not found';
-    } else if (error.response.status >= 500) {
+    } else if (status === 404) {
+      error.message = 'Not found';
+    } else if (status >= 500) {
       error.message = 'Server error. Please try again later.';
+    } else {
+      error.message = 'Request failed. Please try again.';
     }
     return Promise.reject(error);
   }
