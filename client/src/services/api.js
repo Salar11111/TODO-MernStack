@@ -169,6 +169,10 @@ export function clearOfflineQueue() {
 }
 
 if (typeof window !== 'undefined') {
+  // A queue can survive a reload. Start probing immediately so it can replay
+  // even on a page that makes no other API calls (e.g. the login screen).
+  if (readQueue().length) startHealthPolling();
+
   window.addEventListener('online', () => {
     // The browser says we're online, but only a successful server response
     // proves it. Both paths are guarded against duplicate replays.
