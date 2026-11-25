@@ -12,6 +12,34 @@ export function validateTitle(title) {
   return null;
 }
 
+// Registration and password reset use the same strong rule as the server
+// (Server/validation/authValidation.js): 8-72 chars with upper, lower, number
+// and symbol. Keep the messages identical so client and server agree.
+export const PASSWORD_RULES = [
+  { message: 'Password must be at least 8 characters', test: (pw) => pw.length >= 8 },
+  { message: 'Password must include a lowercase letter', test: (pw) => /[a-z]/.test(pw) },
+  { message: 'Password must include an uppercase letter', test: (pw) => /[A-Z]/.test(pw) },
+  { message: 'Password must include a number', test: (pw) => /[0-9]/.test(pw) },
+  { message: 'Password must include a special character', test: (pw) => /[^A-Za-z0-9]/.test(pw) },
+];
+
+export function passwordErrors(password) {
+  const pw = typeof password === 'string' ? password : '';
+  if (!pw) return ['Password is required'];
+
+  const errors = [];
+  if (pw.length > 72) errors.push('Password cannot be more than 72 characters');
+  PASSWORD_RULES.forEach((rule) => {
+    if (!rule.test(pw)) errors.push(rule.message);
+  });
+  return errors;
+}
+
+// First failing rule, matching the server's validation message order.
+export function validatePassword(password) {
+  return passwordErrors(password)[0] || null;
+}
+
 export function parseTags(rawTags) {
   if (!rawTags) return [];
   const tags = rawTags
