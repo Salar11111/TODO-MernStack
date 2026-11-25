@@ -4,6 +4,7 @@ import { toast } from 'sonner';
 import { authApi } from '../services/api';
 import { Input } from '../components/ui/Input';
 import { Button } from '../components/ui/Button';
+import { PASSWORD_RULES, validatePassword } from '../utils/validation';
 
 export default function ResetPasswordPage() {
   const [params] = useSearchParams();
@@ -14,13 +15,17 @@ export default function ResetPasswordPage() {
   const [confirmPassword, setConfirmPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const [showPasswordRules, setShowPasswordRules] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
+    setShowPasswordRules(true);
 
-    if (password.length < 6) {
-      setError('Password must be at least 6 characters');
+    // Same strong rule as registration and the server; server reply is fallback.
+    const invalid = validatePassword(password);
+    if (invalid) {
+      setError(invalid);
       return;
     }
     if (password !== confirmPassword) {
@@ -69,21 +74,46 @@ export default function ResetPasswordPage() {
                 </div>
               )}
 
-              <form onSubmit={handleSubmit} className="space-y-4">
-                <Input
-                  label="New Password"
-                  type="password"
-                  required
-                  minLength={6}
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  placeholder="••••••••"
-                />
+              <form onSubmit={handleSubmit} noValidate className="space-y-4">
+                <div>
+                  <Input
+                    label="New Password"
+                    type="password"
+                    required
+                    maxLength={72}
+                    autoComplete="new-password"
+                    error={showPasswordRules ? validatePassword(password) : ''}
+                    value={password}
+                    onChange={(e) => {
+                      setPassword(e.target.value);
+                      setShowPasswordRules(true);
+                    }}
+                    placeholder="••••••••"
+                  />
+                  {showPasswordRules && (
+                    <ul className="mt-1 space-y-1" aria-live="polite">
+                      {PASSWORD_RULES.map((rule) => {
+                        const met = rule.test(password);
+                        return (
+                          <li
+                            key={rule.message}
+                            className={`flex items-start gap-2 text-xs ${met ? 'text-emerald-600 dark:text-emerald-400' : 'text-gray-600 dark:text-gray-400'}`}
+                          >
+                            <span aria-hidden="true">{met ? '✓' : '○'}</span>
+                            <span>{rule.message}</span>
+                          </li>
+                        );
+                      })}
+                    </ul>
+                  )}
+                </div>
                 <Input
                   label="Confirm Password"
                   type="password"
                   required
-                  minLength={6}
+                  maxLength={72}
+                  autoComplete="new-password"
+                  error={Boolean(confirmPassword) && confirmPassword !== password ? 'Passwords do not match' : ''}
                   value={confirmPassword}
                   onChange={(e) => setConfirmPassword(e.target.value)}
                   placeholder="••••••••"
