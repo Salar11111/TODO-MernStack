@@ -10,14 +10,12 @@ import StatsPage from './pages/StatsPage';
 import KanbanPage from './pages/KanbanPage';
 import CalendarPage from './pages/CalendarPage';
 import AnimatedPage from './components/AnimatedPage';
-import OfflineBanner from './components/OfflineBanner';
 
 function App() {
   const location = useLocation();
 
   return (
     <>
-      <OfflineBanner />
       <AnimatePresence mode="wait">
         <Routes location={location} key={location.pathname}>
           <Route element={<Layout />}>
