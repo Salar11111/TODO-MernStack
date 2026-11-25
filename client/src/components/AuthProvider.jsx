@@ -41,8 +41,15 @@ export default function AuthProvider({ children }) {
         setUser(res.data);
         localStorage.setItem(USER_KEY, JSON.stringify(res.data));
       })
-      .catch(() => {
-        if (!cancelled) persistAuth(null, null);
+      .catch((err) => {
+        if (cancelled) return;
+        // An unreachable server is not proof the session is invalid. Keep the
+        // stored user so pending offline writes can still replay on reconnect.
+        if (!err.response || err.response.status >= 500) {
+          setUserChecked(true);
+          return;
+        }
+        persistAuth(null, null);
       })
       .finally(() => {
         if (!cancelled) setUserChecked(true);
