@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { toast } from 'sonner';
 import { useAuth } from '../context/authContext';
+import { PASSWORD_RULES, passwordErrors, validatePassword } from '../utils/validation';
 
 export default function RegisterPage() {
   const { register } = useAuth();
@@ -12,9 +13,20 @@ export default function RegisterPage() {
   const [confirm, setConfirm] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const [showPasswordRules, setShowPasswordRules] = useState(false);
+
+  const unmetRules = passwordErrors(password);
+  const passwordProblem = showPasswordRules ? validatePassword(password) : null;
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setShowPasswordRules(true);
+    // Validate before any network call: the server response stays as fallback.
+    const invalid = validatePassword(password);
+    if (invalid) {
+      setError(invalid);
+      return;
+    }
     if (password !== confirm) {
       setError('Passwords do not match');
       return;
@@ -50,7 +62,7 @@ export default function RegisterPage() {
             </div>
           )}
 
-          <form onSubmit={handleSubmit} className="space-y-4">
+          <form onSubmit={handleSubmit} noValidate className="space-y-4">
             <div>
               <label htmlFor="name" className="block text-sm font-medium mb-1">
                 Name
@@ -90,12 +102,39 @@ export default function RegisterPage() {
                 id="password"
                 type="password"
                 required
-                minLength={6}
+                maxLength={72}
+                autoComplete="new-password"
                 value={password}
-                onChange={(e) => setPassword(e.target.value)}
+                onChange={(e) => {
+                  setPassword(e.target.value);
+                  setShowPasswordRules(true);
+                }}
                 className={inputClass}
-                placeholder="At least 6 characters"
+                aria-invalid={Boolean(passwordProblem)}
+                aria-describedby="password-requirements"
+                placeholder="At least 8 characters"
               />
+              <div id="password-requirements" className="mt-2" aria-live="polite">
+                {showPasswordRules && (
+                  <ul className="space-y-1">
+                    {PASSWORD_RULES.map((rule) => {
+                      const met = rule.test(password);
+                      return (
+                        <li
+                          key={rule.message}
+                          className={`flex items-start gap-2 text-xs ${met ? 'text-emerald-600 dark:text-emerald-400' : 'text-gray-600 dark:text-gray-400'}`}
+                        >
+                          <span aria-hidden="true">{met ? '✓' : '○'}</span>
+                          <span>{rule.message}</span>
+                        </li>
+                      );
+                    })}
+                    {unmetRules.length > 0 && !password && (
+                      <li className="text-xs text-red-600 dark:text-red-400">{unmetRules[0]}</li>
+                    )}
+                  </ul>
+                )}
+              </div>
             </div>
 
             <div>
@@ -106,12 +145,19 @@ export default function RegisterPage() {
                 id="confirm"
                 type="password"
                 required
-                minLength={6}
+                maxLength={72}
+                autoComplete="new-password"
                 value={confirm}
                 onChange={(e) => setConfirm(e.target.value)}
                 className={inputClass}
+                aria-invalid={Boolean(confirm) && confirm !== password}
                 placeholder="Repeat your password"
               />
+              {Boolean(confirm) && confirm !== password && (
+                <p className="mt-1 text-xs text-red-600 dark:text-red-400" role="alert">
+                  Passwords do not match
+                </p>
+              )}
             </div>
 
             <button
