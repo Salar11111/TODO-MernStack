@@ -1,4 +1,4 @@
-import { Navigate, Route, Routes, useLocation } from 'react-router-dom';
+﻿import { Navigate, Route, Routes, useLocation } from 'react-router-dom';
 import { AnimatePresence } from 'framer-motion';
 import Layout from './components/Layout';
 import LoginPage from './pages/LoginPage';
@@ -10,82 +10,86 @@ import StatsPage from './pages/StatsPage';
 import KanbanPage from './pages/KanbanPage';
 import CalendarPage from './pages/CalendarPage';
 import AnimatedPage from './components/AnimatedPage';
+import OfflineBanner from './components/OfflineBanner';
 
 function App() {
   const location = useLocation();
 
   return (
-    <AnimatePresence mode="wait">
-      <Routes location={location} key={location.pathname}>
-        <Route element={<Layout />}>
+    <>
+      <OfflineBanner />
+      <AnimatePresence mode="wait">
+        <Routes location={location} key={location.pathname}>
+          <Route element={<Layout />}>
+            <Route
+              path="/"
+              element={
+                <AnimatedPage>
+                  <TodosPage />
+                </AnimatedPage>
+              }
+            />
+            <Route
+              path="/stats"
+              element={
+                <AnimatedPage>
+                  <StatsPage />
+                </AnimatedPage>
+              }
+            />
+            <Route
+              path="/kanban"
+              element={
+                <AnimatedPage>
+                  <KanbanPage />
+                </AnimatedPage>
+              }
+            />
+            <Route
+              path="/calendar"
+              element={
+                <AnimatedPage>
+                  <CalendarPage />
+                </AnimatedPage>
+              }
+            />
+          </Route>
           <Route
-            path="/"
+            path="/login"
             element={
               <AnimatedPage>
-                <TodosPage />
+                <LoginPage />
               </AnimatedPage>
             }
           />
           <Route
-            path="/stats"
+            path="/register"
             element={
               <AnimatedPage>
-                <StatsPage />
+                <RegisterPage />
               </AnimatedPage>
             }
           />
           <Route
-            path="/kanban"
+            path="/forgot-password"
             element={
               <AnimatedPage>
-                <KanbanPage />
+                <ForgotPasswordPage />
               </AnimatedPage>
             }
           />
           <Route
-            path="/calendar"
+            path="/reset-password"
             element={
               <AnimatedPage>
-                <CalendarPage />
+                <ResetPasswordPage />
               </AnimatedPage>
             }
           />
-        </Route>
-        <Route
-          path="/login"
-          element={
-            <AnimatedPage>
-              <LoginPage />
-            </AnimatedPage>
-          }
-        />
-        <Route
-          path="/register"
-          element={
-            <AnimatedPage>
-              <RegisterPage />
-            </AnimatedPage>
-          }
-        />
-        <Route
-          path="/forgot-password"
-          element={
-            <AnimatedPage>
-              <ForgotPasswordPage />
-            </AnimatedPage>
-          }
-        />
-        <Route
-          path="/reset-password"
-          element={
-            <AnimatedPage>
-              <ResetPasswordPage />
-            </AnimatedPage>
-          }
-        />
-        <Route path="*" element={<Navigate to="/" replace />} />
-      </Routes>
-    </AnimatePresence>
+          <Route path="*" element={<Navigate to="/" replace />} />
+        </Routes>
+      </AnimatePresence>
+    </>
   );
 }
 
