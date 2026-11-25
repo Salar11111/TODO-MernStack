@@ -1,11 +1,13 @@
 const mongoose = require('mongoose');
 const dotenv = require('dotenv');
+
+// Load environment variables before requiring the app: controllers read
+// JWT_EXPIRES_IN / REFRESH_TOKEN_EXPIRES_IN at module load time.
+dotenv.config();
+
 const connectDB = require('./config/db');
 const logger = require('./config/logger');
 const app = require('./app');
-
-// 1. Load environment variables from the .env file
-dotenv.config();
 
 // 2. Connect to the local MongoDB database
 connectDB();
