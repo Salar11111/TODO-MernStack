@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
-import { authApi } from '../services/api';
+import { authApi, clearOfflineQueue } from '../services/api';
 import { AuthContext } from '../context/authContext';
 
 const USER_KEY = 'todo-user';
@@ -27,7 +27,9 @@ export default function AuthProvider({ children }) {
     else localStorage.removeItem(USER_KEY);
   }, []);
 
-  // Validate the stored token on first load / whenever it changes
+  // Validate the stored token on first load / whenever it changes.
+  // Without a stored session we never call /auth/me, so anonymous visitors do
+  // not produce a 401; authApi.me() has the same guard for other callers.
   useEffect(() => {
     if (!token) return;
 
@@ -66,6 +68,9 @@ export default function AuthProvider({ children }) {
 
   const login = async (email, password) => {
     const res = await authApi.login({ email, password });
+    // Any queued writes belonged to a previous session; do not replay them
+    // under a new identity.
+    clearOfflineQueue();
     persistAuth(res.data.token, res.data.user);
     setUserChecked(true);
     return res.data.user;
@@ -73,6 +78,7 @@ export default function AuthProvider({ children }) {
 
   const register = async (name, email, password) => {
     const res = await authApi.register({ name, email, password });
+    clearOfflineQueue();
     persistAuth(res.data.token, res.data.user);
     setUserChecked(true);
     return res.data.user;
@@ -85,6 +91,8 @@ export default function AuthProvider({ children }) {
     } catch {
       // Ignore - we clear local state regardless
     }
+    // Queued changes are tied to the session that is ending.
+    clearOfflineQueue();
     setUserChecked(false);
     persistAuth(null, null);
   }, [persistAuth]);
